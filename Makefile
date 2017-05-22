@@ -23,3 +23,6 @@ oxydium: compile
 
 clean:
 	rm tmp/*.c tmp/*.h tmp/*.o
+
+run:
+	./bin/oxydium -f in.txt
