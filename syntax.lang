@@ -1,0 +1,54 @@
+# Comment
+
+# Function
+def a() : Int
+  return 1
+end
+
+# Variable
+var b : Int = 10
+
+# Const
+val c : Float = 5.1
+
+# Maths
+b = b + 1
+b = b - 1
+b = b * 1
+b = b / 1
+b = b ^ 1
+
+# Conditions
+if a() in (1..5)
+  print("Hello")
+else
+  print("World")
+end
+
+# Loops
+for i in (1..10)
+  print(i)
+end
+
+while true
+end
+
+# Arrays
+var d : Int[3] = [1, 2, 3]
+
+for i in d
+  print(i)
+end
+
+# Range
+var e : Range = (1..5)
+
+for i in e
+  print(i)
+end
+
+var f : Int[5] = to_array(e) # [1, 2, 3, 4, 5]
+
+# Pipe operator
+var g : Int[5] = e |> to_array() |> to_string()
+                 # to_string(to_array(e))
