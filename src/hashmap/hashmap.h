@@ -1,6 +1,6 @@
 #ifndef __HASHMAP_H__
 #define __HASHMAP_H__
-#include "../linked_list/linked_list.h"
+#include "linked_list.h"
 
 #define HASHMAP_COUNT 256
 // String hashcode

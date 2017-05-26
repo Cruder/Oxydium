@@ -6,13 +6,15 @@ enum NodeType {
 	NTINSTLIST = 1,
 
 	NTNUM   = 201,
+	NTVAR   = 202,
 
 	NTPLUS  = 321,
 	NTMIN   = 322,
 	NTMULT  = 323,
 	NTDIV   = 324,
-	NTPOW   = 325
+	NTPOW   = 325,
 
+	NTIF    = 401
 };
 
 typedef struct Node {

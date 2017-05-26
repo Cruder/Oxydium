@@ -1,7 +1,7 @@
 #ifndef __VARIABLE_TABLE_H__
 #define __VARIABLE_TABLE_H__
 
-#include "hashmap/hashmap.h"
+#include "hashmap.h"
 
 typedef struct HashNode {
   struct HashNode* next;
