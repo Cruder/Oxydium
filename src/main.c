@@ -15,7 +15,7 @@
 // print(nomnomnom) # 21.4
 int main(int argc, char const *argv[]) {
   VariableTable* table = variableTableCreate();
-  Node* node = NULL;
+  VariableNode* node = NULL;
 
   variableTableSetVariable(table, "nomnomnom", 21.4, true);
   node = variableTableGetVariable(table, "nomnomnom");

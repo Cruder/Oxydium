@@ -20,10 +20,10 @@ void           variableTableDestroy(VariableTable* table);
 void           variableTableIncrementDepth(VariableTable* table);
 void           variableTableDecrementDepth(VariableTable* table);
 
-Node*          variableTableGetVariable(VariableTable* table, char* str);
+VariableNode*  variableTableGetVariable(VariableTable* table, char* str);
 void           variableTableSetVariable(VariableTable* table, char* str,
                                         double value, bool constant);
 void           variableTableDisplay(VariableTable* table);
-void           variableTableUpdateVariable(Node* node, double value);
+void           variableTableUpdateVariable(VariableNode* node, double value);
 
 #endif /* end of include guard: __VARIABLE_TABLE_H__ */
