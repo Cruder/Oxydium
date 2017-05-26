@@ -31,7 +31,7 @@ bool hashmapContainsValue(Hashmap* map, char* str) {
 }
 
 void hashmapPut(Hashmap* map, char* str, double value, bool constant) {
-  Node* node = hashmapGet(map, str);
+  VariableNode* node = hashmapGet(map, str);
   if(node) {
     node->value = value;
   } else {
@@ -40,7 +40,7 @@ void hashmapPut(Hashmap* map, char* str, double value, bool constant) {
   }
 }
 
-Node* hashmapGet(Hashmap* map, char* str) {
+VariableNode* hashmapGet(Hashmap* map, char* str) {
   LinkedList* list = map->elements[stringHashcode(str) % HASHMAP_COUNT];
   return linkedListGet(list, str);
 }

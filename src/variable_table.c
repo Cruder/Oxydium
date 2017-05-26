@@ -41,11 +41,11 @@ void variableTableDecrementDepth(VariableTable* table) {
   --table->depth;
 }
 
-Node* variableTableGetVariable(VariableTable* table, char* str) {
+VariableNode* variableTableGetVariable(VariableTable* table, char* str) {
   HashNode* current = hashNodeGetLast(table->head);
 
   do {
-    Node* result = hashmapGet(current->map, str);
+    VariableNode* result = hashmapGet(current->map, str);
     if(result) { return result; }
 
     current = current->previous;
@@ -91,7 +91,7 @@ HashNode* hashNodeGetLast(HashNode* node) {
   return hashNodeGetLast(node->next);
 }
 
-void variableTableUpdateVariable(Node* node, double value) {
+void variableTableUpdateVariable(VariableNode* node, double value) {
   if(node->constant) { return; }
 
   node->value = value;

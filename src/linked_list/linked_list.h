@@ -4,26 +4,24 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct Node {
-  struct Node* next;
+typedef struct VariableNode {
+  struct VariableNode* next;
   char*  name;
   double value;
   bool   constant;
-} Node;
+} VariableNode;
 
 typedef struct LinkedList {
-  Node* head;
+  VariableNode* head;
   size_t size;
 } LinkedList;
 
-LinkedList* linkedListCreate();
-void        linkedListDestroy(LinkedList* list);
+LinkedList*   linkedListCreate();
+VariableNode* linkedListGet(LinkedList* list, char* str);
 
-bool        linkedListContainsValue(LinkedList* list, char* str);
-void        linkedListPut(LinkedList* list, char* str, double value,
-                          bool constant);
-Node*       linkedListGet(LinkedList* list, char* str);
-
-void        linkedListPrint(LinkedList* list);
+bool linkedListContainsValue(LinkedList* list, char* str);
+void linkedListDestroy(LinkedList* list);
+void linkedListPut(LinkedList* list, char* str, double value, bool constant);
+void linkedListPrint(LinkedList* list);
 
 #endif /* end of include guard: __LINKED_LIST_H__ */
