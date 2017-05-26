@@ -6,8 +6,9 @@
 
 typedef struct Node {
   struct Node* next;
-  char* name;
+  char*  name;
   double value;
+  bool   constant;
 } Node;
 
 typedef struct LinkedList {
@@ -19,7 +20,8 @@ LinkedList* linkedListCreate();
 void        linkedListDestroy(LinkedList* list);
 
 bool        linkedListContainsValue(LinkedList* list, char* str);
-void        linkedListPut(LinkedList* list, char* str, double value);
+void        linkedListPut(LinkedList* list, char* str, double value,
+                          bool constant);
 Node*       linkedListGet(LinkedList* list, char* str);
 
 void        linkedListPrint(LinkedList* list);

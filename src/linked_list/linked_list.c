@@ -6,7 +6,7 @@ Node* nodeGetLast(Node* node);
 void  nodeDestroyRecursive(Node* node);
 bool  nodeContainsRecursive(Node* node, char* str);
 Node* nodeFindRecursive(Node* node, char* str);
-Node* nodeCreate(char* str, double value);
+Node* nodeCreate(char* str, double value, bool constant);
 void nodePrint(Node* node);
 
 LinkedList* linkedListCreate() {
@@ -24,9 +24,9 @@ void linkedListDestroy(LinkedList* list) {
   list = NULL;
 }
 
-void linkedListPut(LinkedList* list, char* str, double value) {
+void linkedListPut(LinkedList* list, char* str, double value, bool constant) {
   Node* last    = nodeGetLast(list->head);
-  Node* newNode = nodeCreate(str, value);
+  Node* newNode = nodeCreate(str, value, constant);
 
   if(last == NULL) {
     list->head = newNode;
@@ -54,7 +54,7 @@ void linkedListPrint(LinkedList* list) {
 void nodePrint(Node* node) {
   if(node == NULL) { return; }
 
-  printf("{%s -> %lf}", node->name, node->value);
+  printf("{%s -> %lf | %s}", node->name, node->value, node->constant ? "true" : "false");
   if(node->next != NULL) {
     printf(", ");
   }
@@ -62,12 +62,13 @@ void nodePrint(Node* node) {
   nodePrint(node->next);
 }
 
-Node* nodeCreate(char* str, double value) {
+Node* nodeCreate(char* str, double value, bool constant) {
     Node* node = (Node*) malloc(sizeof(Node));
     node->name = (char*) malloc(sizeof(char) * (strlen(str) + 1));
     strcpy(node->name, str);
-    node->value = value;
-    node->next  = NULL;
+    node->value    = value;
+    node->next     = NULL;
+    node->constant = constant;
     return node;
 }
 

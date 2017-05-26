@@ -30,13 +30,13 @@ bool hashmapContainsValue(Hashmap* map, char* str) {
   return hashmapGet(map, str) == NULL ? false : true;
 }
 
-void hashmapPut(Hashmap* map, char* str, double value) {
+void hashmapPut(Hashmap* map, char* str, double value, bool constant) {
   Node* node = hashmapGet(map, str);
   if(node) {
     node->value = value;
   } else {
     LinkedList* list = map->elements[stringHashcode(str) % HASHMAP_COUNT];
-    linkedListPut(list, str, value);
+    linkedListPut(list, str, value, constant);
   }
 }
 

@@ -22,7 +22,8 @@ void           variableTableDecrementDepth(VariableTable* table);
 
 Node*          variableTableGetVariable(VariableTable* table, char* str);
 void           variableTableSetVariable(VariableTable* table, char* str,
-                                        double value);
+                                        double value, bool constant);
 void           variableTableDisplay(VariableTable* table);
+void           variableTableUpdateVariable(Node* node, double value);
 
 #endif /* end of include guard: __VARIABLE_TABLE_H__ */

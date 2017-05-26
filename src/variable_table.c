@@ -54,10 +54,11 @@ Node* variableTableGetVariable(VariableTable* table, char* str) {
   return NULL;
 }
 
-void variableTableSetVariable(VariableTable* table, char* str, double value) {
+void variableTableSetVariable(VariableTable* table, char* str,
+                              double value, bool constant) {
   HashNode* hashNode = hashNodeGetLast(table->head);
 
-  hashmapPut(hashNode->map, str, value);
+  hashmapPut(hashNode->map, str, value, constant);
 }
 
 void variableTableDisplay(VariableTable* table) {
@@ -88,4 +89,10 @@ HashNode* hashNodeGetLast(HashNode* node) {
   if(node->next == NULL) { return node; }
 
   return hashNodeGetLast(node->next);
+}
+
+void variableTableUpdateVariable(Node* node, double value) {
+  if(node->constant) { return; }
+
+  node->value = value;
 }

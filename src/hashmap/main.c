@@ -4,8 +4,8 @@
 int main(int argc, char const *argv[]) {
   Hashmap* map = hashmapCreate();
 
-  hashmapPut(map, "bonjour?", 210.42);
-  hashmapPut(map, "non!", 12.1);
+  hashmapPut(map, "bonjour?", 210.42, false);
+  hashmapPut(map, "non!", 12.1, true);
 
   hashmapPrint(map);
 
@@ -13,6 +13,5 @@ int main(int argc, char const *argv[]) {
 
   hashmapDestroy(map);
 
-  printf("Pointer -> %p\n", map);
   return 0;
 }
