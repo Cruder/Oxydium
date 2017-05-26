@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "node_tree.h"
+#include "tree.h"
 
 # define PRINTTAB 2
 

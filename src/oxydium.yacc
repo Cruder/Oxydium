@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "node_tree.h"
-#include "node_eval.h"
+#include "tree.h"
+#include "tree_eval.h"
+#include "variable_table.h"
 
 extern int  yyparse();
 extern int yylex (void);
@@ -13,6 +14,7 @@ int yyerror(char *s);
 int exec(Node *node);
 
 Node root;
+VariableTable* variable_table;
 
 %}
 

@@ -3,7 +3,7 @@
 
 #include "oxydium.h"
 #include <stdlib.h>
-#include "node_tree.h"
+#include "tree.h"
 
 %}
 

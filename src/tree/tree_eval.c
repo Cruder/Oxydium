@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <setjmp.h>
-#include "node_tree.h"
-#include "node_eval.h"
+#include "tree.h"
+#include "tree_eval.h"
 
 double evalExpr(Node *node) {
 	switch ( node->type ) {
