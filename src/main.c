@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-// var nomnomnom = 21.4
+// val nomnomnom = 21.4
 // print(nomnomnom) # 21.4
 // do
 //   var nomnomnom = 5.1
@@ -17,15 +17,16 @@ int main(int argc, char const *argv[]) {
   VariableTable* table = variableTableCreate();
   Node* node = NULL;
 
-  variableTableSetVariable(table, "nomnomnom", 21.4);
+  variableTableSetVariable(table, "nomnomnom", 21.4, true);
   node = variableTableGetVariable(table, "nomnomnom");
+  variableTableUpdateVariable(node, 12);
   printf("{%s -> %lf}\n", node->name, node->value);
   variableTableIncrementDepth(table);
-    variableTableSetVariable(table, "nomnomnom", 5.1);
+    variableTableSetVariable(table, "nomnomnom", 5.1, false);
     node = variableTableGetVariable(table, "nomnomnom");
     printf("{%s -> %lf}\n", node->name, node->value);
 
-    variableTableSetVariable(table, "rm", 7.1);
+    variableTableSetVariable(table, "rm", 7.1, false);
     node = variableTableGetVariable(table, "rm");
     printf("{%s -> %lf}\n", node->name, node->value);
   variableTableDecrementDepth(table);

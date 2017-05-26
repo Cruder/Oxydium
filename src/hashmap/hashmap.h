@@ -14,7 +14,7 @@ Hashmap* hashmapCreate();
 void     hashmapDestroy(Hashmap* map);
 
 bool     hashmapContainsValue(Hashmap* map, char* str);
-void     hashmapPut(Hashmap* map, char* str, double value);
+void     hashmapPut(Hashmap* map, char* str, double value, bool constant);
 Node*    hashmapGet(Hashmap* map, char* str);
 void     hashmapPrint(Hashmap* map);
 
