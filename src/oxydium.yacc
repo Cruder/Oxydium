@@ -13,23 +13,25 @@ extern FILE *yyin;
 int yyerror(char *s);
 int exec(Node *node);
 
-Node root;
 VariableTable* variable_table;
 
 %}
 
 %union {
 	struct Node *node;
+	double val;
+	char* var;
 }
 
 %token   <node> NUM
 %token   <node> PLUS MIN MULT DIV POW
+%token   <var> VARIABLE
+%token   VAR_TOKEN VAL_TOKEN
 %token   OP_PAR CL_PAR COLON
 %token   NEG
-%token   EOL
+%token   COMMENT EOL EQUAL
 
-%type   <node> Instlist
-%type   <node> Inst
+%type   <node> Line
 %type   <node> Expr
 
 %left PLUS MIN
@@ -42,25 +44,21 @@ VariableTable* variable_table;
 
 Input:
       {/* Nothing ... */ }
-  | Line Input { /* Nothing ... */ }
+  | Line Input { exec($1); }
 
 
 Line:
     EOL {  }
-  | Instlist EOL { ; }
-  ;
-
-Instlist:
-    Inst { ; }
-  | Instlist Inst { ; }
-  ;
-
-Inst:
-    Expr COLON { $$ = $1; exec($1); }
+  | Expr EOL { $$ = $1; }
   ;
 
 Expr:
-  NUM            { $$=$1; }
+	COMMENT							 { $$=createNode(NTEMPTY); }
+	| VAR_TOKEN VARIABLE EQUAL Expr { printf("variable init (%s)\n", $2); $$=$4; }
+	| VARIABLE EQUAL Expr { printf("variable assign (%s)\n", $1); $$=$3; }
+	| VARIABLE					 { printf("get variable (%s)\n", $1); $$=createNode(NTEMPTY); }
+	| VARIABLE OP_PAR Expr CL_PAR { printf("function (%s)\n", $1); $$=$3; }
+  | NUM            		 { $$=$1; }
   | Expr PLUS Expr     { $$=nodeChildren($2, $1, $3); }
   | Expr MIN Expr      { $$=nodeChildren($2, $1, $3); }
   | Expr MULT Expr     { $$=nodeChildren($2, $1, $3); }

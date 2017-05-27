@@ -37,4 +37,4 @@ clean:
 	rm tmp/*.c tmp/*.h tmp/*.o
 
 run:
-	./bin/oxydium -f files/0.ox
+	./bin/oxydium -f files/1.ox
