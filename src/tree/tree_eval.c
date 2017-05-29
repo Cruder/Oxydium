@@ -27,7 +27,7 @@ double evalExpr(Node *node) {
 	};
 }
 
-int evalInst(Node* node) {
+double evalInst(Node* node) {
 	double val;
 	switch ( node->type ) {
 	case NTEMPTY: return 0;
@@ -38,8 +38,8 @@ int evalInst(Node* node) {
 	case NTMULT:
 	case NTDIV:
 	case NTPOW:
-		printf("%f\n", evalExpr(node));
-		return 0;
+		// printf("%f\n", evalExpr(node));
+		return evalExpr(node);
 
 	default:
 		printf("Error in evalInst ... Wrong node type: %s\n", node2String(node));
@@ -49,6 +49,6 @@ int evalInst(Node* node) {
 	return 0;
 }
 
-int eval(Node *node) {
+double eval(Node *node) {
 	return evalInst(node);
 }

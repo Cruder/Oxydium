@@ -11,7 +11,7 @@ extern int  yyparse();
 extern int yylex (void);
 extern FILE *yyin;
 int yyerror(char *s);
-int exec(Node *node);
+double exec(Node *node);
 
 VariableTable* variable_table;
 
@@ -29,7 +29,7 @@ VariableTable* variable_table;
 %token   VAR_TOKEN VAL_TOKEN
 %token   OP_PAR CL_PAR COLON
 %token   NEG
-%token   COMMENT EOL EQUAL
+%token   COMMENT EOL EQUAL DVT
 
 %type   <node> Line
 %type   <node> Expr
@@ -55,21 +55,26 @@ Line:
 Expr:
 	COMMENT							 { $$=createNode(NTEMPTY); }
 	| VAR_TOKEN VARIABLE EQUAL Expr {
-		printf("variable init (%s)\n", $2);
-		printf("-> %s\n", $2);
-		variableTableSetVariable(variable_table, $2, $4->val, false);
+		// printf("variable init (%s)\n", $2);
+		// printf("-> %s\n", $2);
+		variableTableSetVariable(variable_table, $2, exec($4), false);
 		$$=$4;
 	}
-	| VARIABLE EQUAL Expr { printf("variable assign (%s)\n", $1); $$=$3; }
+	| VARIABLE EQUAL Expr {
+		VariableNode* node = variableTableGetVariable(variable_table, $1);
+		if(node) {
+			variableTableUpdateVariable(node, exec($3));
+		}
+		$$=createNode(NTEMPTY);
+	}
 	| VARIABLE {
-		printf("get variable (%s)\n", $1);
+		// printf("get variable (%s)\n", $1);
 		Node* node = createNode(NTNUM);
 		node->val = variableTableGetVariable(variable_table, $1)->value;
 		$$=node;
-		}
+	}
 	| VARIABLE OP_PAR Expr CL_PAR {
-		printf("function (%s)\n", $1);
-		printf("Value -> %lf\n", $3->val);
+		printf("function(%s) => %lf\n", $1, $3->val);
 		$$=$3;
 	}
   | NUM            		 { $$=$1; }
@@ -80,18 +85,22 @@ Expr:
   | MIN Expr %prec NEG { ; }
   | Expr POW Expr      { $$=nodeChildren($2, $1, $3); }
   | OP_PAR Expr CL_PAR { $$=$2; }
+	| DVT								 {
+		variableTableDisplay(variable_table);
+		$$=createNode(NTEMPTY);
+	}
   ;
 
 %%
 
 
-int exec(Node *node) {
+double exec(Node *node) {
 	// printGraph(node);
 	return eval(node);
 }
 
 int yyerror(char *s) {
-  printf("%s\n", s);
+  // printf("%s\n", s);
 	return 0;
 }
 

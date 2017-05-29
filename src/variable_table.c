@@ -62,7 +62,14 @@ void variableTableSetVariable(VariableTable* table, char* str,
 }
 
 void variableTableDisplay(VariableTable* table) {
-  printf("VariableTable []\n");
+  printf("VariableTable [\n");
+  HashNode* node = table->head;
+  for(size_t i = 0; node != NULL; ++i) {
+    printf("Scope %zu ->", i);
+    hashmapPrint(node->map);
+    node = node->next;
+  }
+  printf("]\n");
 }
 
 HashNode* hashNodeCreate() {

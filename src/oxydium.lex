@@ -20,6 +20,8 @@ val       (val)
 var       (var)
 
 variable [a-zA-Z](?:[a-zA-Z_0-9]+)?[\?!]?
+
+display_table (!display_variable_table!)
 %%
 
 {empty}  { /* Nothing */ }
@@ -55,3 +57,5 @@ variable [a-zA-Z](?:[a-zA-Z_0-9]+)?[\?!]?
 {comment}   { return(COMMENT); }
 
 "\n"   { return(EOL); }
+
+{display_table} { return DVT; }
