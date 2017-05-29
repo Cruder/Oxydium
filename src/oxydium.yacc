@@ -44,20 +44,34 @@ VariableTable* variable_table;
 
 Input:
       {/* Nothing ... */ }
-  | Line Input { exec($1); }
+  | Line Input { }
 
 
 Line:
     EOL {  }
-  | Expr EOL { $$ = $1; }
+  | Expr EOL { $$ = $1; exec($1); }
   ;
 
 Expr:
 	COMMENT							 { $$=createNode(NTEMPTY); }
-	| VAR_TOKEN VARIABLE EQUAL Expr { printf("variable init (%s)\n", $2); $$=$4; }
+	| VAR_TOKEN VARIABLE EQUAL Expr {
+		printf("variable init (%s)\n", $2);
+		printf("-> %s\n", $2);
+		variableTableSetVariable(variable_table, $2, $4->val, false);
+		$$=$4;
+	}
 	| VARIABLE EQUAL Expr { printf("variable assign (%s)\n", $1); $$=$3; }
-	| VARIABLE					 { printf("get variable (%s)\n", $1); $$=createNode(NTEMPTY); }
-	| VARIABLE OP_PAR Expr CL_PAR { printf("function (%s)\n", $1); $$=$3; }
+	| VARIABLE {
+		printf("get variable (%s)\n", $1);
+		Node* node = createNode(NTNUM);
+		node->val = variableTableGetVariable(variable_table, $1)->value;
+		$$=node;
+		}
+	| VARIABLE OP_PAR Expr CL_PAR {
+		printf("function (%s)\n", $1);
+		printf("Value -> %lf\n", $3->val);
+		$$=$3;
+	}
   | NUM            		 { $$=$1; }
   | Expr PLUS Expr     { $$=nodeChildren($2, $1, $3); }
   | Expr MIN Expr      { $$=nodeChildren($2, $1, $3); }
@@ -72,7 +86,7 @@ Expr:
 
 
 int exec(Node *node) {
-	printGraph(node);
+	// printGraph(node);
 	return eval(node);
 }
 
@@ -82,16 +96,19 @@ int yyerror(char *s) {
 }
 
 int main(int arc, char **argv) {
-	if ((arc == 3) && (strcmp(argv[1], "-f") == 0)) {
-		FILE *fp=fopen(argv[2],"r");
-  	if(!fp) {
-      printf("Impossible d'ouvrir le fichier à executer.\n");
-      exit(0);
-    }
-    yyin=fp;
-    yyparse();
+	if(arc != 3 || strcmp(argv[1], "-f") != 0) { return 1; }
 
-    fclose(fp);
+	FILE *fp = fopen(argv[2],"r");
+	if(!fp) {
+    printf("Impossible d'ouvrir le fichier à executer.\n");
+    exit(0);
   }
+	variable_table = variableTableCreate();
+
+  yyin=fp;
+  yyparse();
+
+  fclose(fp);
+
   return 0;
 }
