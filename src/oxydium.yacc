@@ -64,6 +64,9 @@ Expr:
 		VariableNode* node = variableTableGetVariable(variable_table, $1);
 		if(node) {
 			variableTableUpdateVariable(node, exec($3));
+		} else {
+			fprintf(stderr, "[ERROR] The variable %s does not exist\n", $1);
+			exit(1);
 		}
 		$$=createNode(NTEMPTY);
 	}
