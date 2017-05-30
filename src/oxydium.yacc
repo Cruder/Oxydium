@@ -55,15 +55,22 @@ Line:
 Expr:
 	COMMENT							 { $$=createNode(NTEMPTY); }
 	| VAR_TOKEN VARIABLE EQUAL Expr {
-		// printf("variable init (%s)\n", $2);
-		// printf("-> %s\n", $2);
 		variableTableSetVariable(variable_table, $2, exec($4), false);
+		$$=$4;
+	}
+	| VAL_TOKEN VARIABLE EQUAL Expr {
+		variableTableSetVariable(variable_table, $2, exec($4), true);
 		$$=$4;
 	}
 	| VARIABLE EQUAL Expr {
 		VariableNode* node = variableTableGetVariable(variable_table, $1);
 		if(node) {
-			variableTableUpdateVariable(node, exec($3));
+			if(!node->constant) {
+				variableTableUpdateVariable(node, exec($3));
+			} else {
+				fprintf(stderr, "[ERROR] The variable %s is a constant\n", $1);
+				exit(1);
+			}
 		} else {
 			fprintf(stderr, "[ERROR] The variable %s does not exist\n", $1);
 			exit(1);
