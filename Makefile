@@ -19,8 +19,6 @@ copy:
 	cp src/linked_list/linked_list.c tmp/linked_list.c
 	cp src/variable_table.c					 tmp/variable_table.c
 
-
-
 compile: lex yacc copy
 	clang -c tmp/tree.c 			 				 		 -o tmp/tree.o
 	clang -c tmp/tree_eval.c 			 				 -o tmp/tree_eval.o
@@ -37,4 +35,4 @@ clean:
 	rm tmp/*.c tmp/*.h tmp/*.o
 
 run:
-	./bin/oxydium -f files/1.ox
+	./bin/oxydium -f files/2.ox
