@@ -25,13 +25,6 @@ display_table (!display_variable_table!)
 %%
 
 {empty}  { /* Nothing */ }
-
-
-
-"("   return(OP_PAR);
-")"   return(CL_PAR);
-
-
 {real}    {
     yylval.node = createNode(NTNUM);
     yylval.node->val = atof(yytext);
@@ -51,11 +44,24 @@ display_table (!display_variable_table!)
 "*"   { yylval.node = createNode(NTMULT); return(MULT); }
 "/"   { yylval.node = createNode(NTDIV); return(DIV); }
 "^"   { yylval.node = createNode(NTPOW); return(POW); }
+"("   { return OP_PAR; }
+")"   { return CL_PAR; }
 ":"   { return COLON; }
 "="   { return EQUAL; }
+"|>"  { return PIPE_OP; }
+
+"=="  { return TOK_EQ; }
+"!="  { return NOT_EQ; }
+">="  { return SUP_EQ; }
+"<="  { return INF_EQ; }
+">"   { return SUP; }
+"<"   { return INF; }
 
 {comment}   { return(COMMENT); }
 
-"\n"   { return(EOL); }
+"\n"    { return(EOL); }
+"if"    { return IF; }
+"true"  { return TRUE; }
+"false" { return FALSE; }
 
 {display_table} { return DVT; }
