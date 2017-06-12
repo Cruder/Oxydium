@@ -14,7 +14,7 @@ extern FILE *yyin;
 int yyerror(char *s);
 double exec(Node *node);
 
-VariableTable* variable_table;
+OxydiumExec* oxydium_exec;
 
 %}
 
@@ -27,6 +27,7 @@ VariableTable* variable_table;
 
 %token   <node> NUM
 %token   <node> PLUS MIN MULT DIV POW
+%token   <node> TOK_EQ NOT_EQ SUP_EQ INF_EQ SUP INF TRUE FALSE
 %token   <var> VARIABLE
 %token   VAR_TOKEN VAL_TOKEN
 %token   OP_PAR CL_PAR COLON
@@ -39,12 +40,12 @@ VariableTable* variable_table;
 %type   <node> Line
 %type   <node> Expr
 %type   <node> Block
+%type   <node> Boolean
 %type   <node> Input
 %type   <node> Assignement
 %type   <node> Condition
 %type   <node> Math
 %type   <node> Function
-%type   <boolean> Boolean
 
 %left PLUS MIN
 %left MULT DIV
@@ -72,27 +73,27 @@ Block:
 	;
 
 Boolean:
-		Expr TOK_EQ Expr { $$=$1->val == $3->val; }
-	|	Expr NOT_EQ Expr { $$=$1 != $3; }
-	|	Expr SUP_EQ Expr { $$=$1 >= $3; }
-	| Expr INF_EQ Expr { $$=$1 <= $3; }
-	| Expr SUP 		Expr { printf("SUP\n"); $$=$1 >  $3; }
-	| Expr INF    Expr { $$=$1 <  $3; }
-	| TRUE						 { $$=true;     }
-	| FALSE 					 { $$=false;    }
+		Expr TOK_EQ Expr { $$=nodeChildren($2, $1, $3); }
+	|	Expr NOT_EQ Expr { $$=nodeChildren($2, $1, $3); }
+	|	Expr SUP_EQ Expr { $$=nodeChildren($2, $1, $3); }
+	| Expr INF_EQ Expr { $$=nodeChildren($2, $1, $3); }
+	| Expr SUP 		Expr { $$=nodeChildren($2, $1, $3); }
+	| Expr INF    Expr { $$=nodeChildren($2, $1, $3); }
+	| TRUE						 { $$=$1; }
+	| FALSE 					 { $$=$1; }
 	;
 
 Assignement:
 		VAR_TOKEN VARIABLE EQUAL Expr {
-			variableTableSetVariable(variable_table, $2, exec($4), false);
+			variableTableSetVariable(oxydium_exec->variable_table, $2, exec($4), false);
 			$$=$4;
 		}
 	| VAL_TOKEN VARIABLE EQUAL Expr {
-			variableTableSetVariable(variable_table, $2, exec($4), true);
+			variableTableSetVariable(oxydium_exec->variable_table, $2, exec($4), true);
 			$$=$4;
 		}
 	| VARIABLE EQUAL Expr {
-			VariableNode* node = variableTableGetVariable(variable_table, $1);
+			VariableNode* node = variableTableGetVariable(oxydium_exec->variable_table, $1);
 			if(node) {
 				if(!node->constant) {
 					variableTableUpdateVariable(node, exec($3));
@@ -120,7 +121,7 @@ Math:
 	| Expr MIN Expr      { $$=nodeChildren($2, $1, $3); }
 	| Expr MULT Expr     { $$=nodeChildren($2, $1, $3); }
 	| Expr DIV Expr      { $$=nodeChildren($2, $1, $3); }
-	| MIN Expr %prec NEG { ; }
+//	| MIN Expr %prec NEG { ; }
 	| Expr POW Expr      { $$=nodeChildren($2, $1, $3); }
 
 // Should be done with Function Workflow
@@ -143,12 +144,12 @@ Expr:
 	| Function { $$ = $1; }
 	| VARIABLE {
 		Node* node = createNode(NTNUM);
-		node->val = variableTableGetVariable(variable_table, $1)->value;
+		node->val = variableTableGetVariable(oxydium_exec->variable_table, $1)->value;
 		$$=node;
 	}
   | OP_PAR Expr CL_PAR { $$=$2; }
 	| DVT								 {
-		variableTableDisplay(variable_table);
+		variableTableDisplay(oxydium_exec->variable_table);
 		$$=createNode(NTEMPTY);
 	}
   ;
@@ -174,7 +175,7 @@ int main(int arc, char **argv) {
     printf("Impossible d'ouvrir le fichier à executer.\n");
     exit(0);
   }
-	variable_table = variableTableCreate();
+	oxydium_exec = oxydiumExecCreate(variableTableCreate());
 
   yyin=fp;
   yyparse();

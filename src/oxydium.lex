@@ -43,25 +43,25 @@ display_table (!display_variable_table!)
 "-"   { yylval.node = createNode(NTMIN); return(MIN); }
 "*"   { yylval.node = createNode(NTMULT); return(MULT); }
 "/"   { yylval.node = createNode(NTDIV); return(DIV); }
-"^"   { yylval.node = createNode(NTPOW); return(POW); }
+"**"  { yylval.node = createNode(NTPOW); return(POW); }
 "("   { return OP_PAR; }
 ")"   { return CL_PAR; }
 ":"   { return COLON; }
 "="   { return EQUAL; }
 "|>"  { return PIPE_OP; }
 
-"=="  { return TOK_EQ; }
-"!="  { return NOT_EQ; }
-">="  { return SUP_EQ; }
-"<="  { return INF_EQ; }
-">"   { return SUP; }
-"<"   { return INF; }
+"=="  { yylval.node = createNode(NTTOK_EQ); return TOK_EQ; }
+"!="  { yylval.node = createNode(NTNOT_EQ); return NOT_EQ; }
+">="  { yylval.node = createNode(NTSUP_EQ); return SUP_EQ; }
+"<="  { yylval.node = createNode(NTINF_EQ); return INF_EQ; }
+">"   { yylval.node = createNode(NTSUP);    return SUP; }
+"<"   { yylval.node = createNode(NTINF);    return INF; }
 
 {comment}   { return(COMMENT); }
 
 "\n"    { return(EOL); }
 "if"    { return IF; }
-"true"  { return TRUE; }
-"false" { return FALSE; }
+"true"  { yylval.node = createNode(NTTRUE);  return TRUE; }
+"false" { yylval.node = createNode(NTFALSE); return FALSE; }
 
 {display_table} { return DVT; }

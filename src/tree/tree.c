@@ -6,9 +6,10 @@
 # define PRINTTAB 2
 
 Node* createNode(int type) {
-	Node* newnode = (Node *) malloc(sizeof(Node));
+	Node* newnode = (Node*)malloc(sizeof(Node));
 	newnode->type = type;
 	newnode->children = NULL;
+	newnode->children_count = 0;
 	return newnode;
 }
 
@@ -16,14 +17,25 @@ Node* nodeChildren(Node *father, Node *child1, Node *child2) {
 	father->children = (Node **) malloc(sizeof(Node*) * 2);
 	father->children[0] = child1;
 	father->children[1] = child2;
+	father->children_count = 2;
 	return father;
+}
+
+void nodeDestroy(Node* node) {
+	for(size_t i = 0; i < node->children_count; ++i) {
+		nodeDestroy(node->children[i]);
+	}
+
+	// if(node->type == NTSUITE) { nodeExecDestroy(node->suite); }
+
+	free(node);
 }
 
 const char* node2String(Node *node) {
 	char *res;
 	switch ( node->type ) {
 	case NTEMPTY:    return "NTEMPTY";
-	case NTINSTLIST: return "NTINSTLIST";
+	case NTSUITE: return "NTSUITE";
 
 	case NTNUM:
 		res = (char *)malloc(sizeof(char) * 32);

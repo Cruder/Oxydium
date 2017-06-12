@@ -25,6 +25,8 @@ else
   print("World")
 end
 
+print("Hello") if a()
+
 # Loops
 for i in (1..10)
   print(i)
